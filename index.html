@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QR Code Game</title>
+<style>
+  body {
+    margin: 0px;
+    overflow: hidden;
+  }
+  canvas {
+    background: white;
+  }
+</style>
+</head>
+<body>
+<canvas id="myCanvas"></canvas>
+<script>
+const canvas = document.getElementById("myCanvas");
+const ctx = canvas.getContext("2d");
+canvas.height = window.innerHeight; 
+canvas.width = window.innerWidth;
+const SIZE = canvas.width / 20;
+const speed1 = SIZE / 7;
+let LEVEL = 3;
+const img = new Image(); // Create new img element
+img.src = "data:image/png;base64,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";
+
+class QRCode{
+  constructor(){
+    this.x = Math.floor(Math.random() * (canvas.width - SIZE));
+    this.y = Math.floor(Math.random() * (canvas.height - SIZE));
+    this.size = SIZE;
+    this.speed1x = speed1;
+    this.speed1y = speed1 * 2 / 3;
+  }
+  draw(){
+    ctx.drawImage(img, this.x, this.y, this.size, this.size);
+  }
+  move1(){
+    this.x += this.speed1x;
+    if(this.x <= 0) this.speed1x = -1 * this.speed1x;
+    if(this.x >= canvas.width - this.size) this.speed1x = -1 * this.speed1x;
+  }
+  move2(){
+    this.y += this.speed1y;
+    if(this.y <= 0) this.speed1y = -1 * this.speed1y;
+    if(this.y >= canvas.height - this.size) this.speed1y = -1 * this.speed1y;
+  }
+  move3(){
+    this.move1();
+    this.move2();
+  }
+  move4(){
+    this.move3();
+    ctx.rotate(-1 * Math.PI / 4);
+  }
+}
+
+Code = new QRCode();
+Code.draw();
+
+function Animate(){
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "black";
+  ctx.fillRect(canvas.width/2, 0, canvas.width/2, canvas.height);
+  Code.draw();
+  if(LEVEL == 1) Code.move1();
+  if(LEVEL == 2) Code.move2();
+  if(LEVEL == 3) Code.move3();
+  if(LEVEL == 4) Code.move4();
+  requestAnimationFrame(Animate);
+}
+
+Animate();
+</script>
+</body>
+</html>
